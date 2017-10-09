@@ -23,6 +23,7 @@ Module stateVar_Mod
     Double Precision :: rfC
     Double Precision :: d1T
     Double Precision :: d1C
+    Double Precision :: pert
 
     ! Stored for debugging only
     Double Precision :: d_eps12
@@ -70,6 +71,7 @@ Contains
 
     ! State variables required only for fiber compression
     sv%d1C = MAX(zero, stateOld(19))
+    sv%pert = stateOld(20)
 
     Return
   End Function loadStateVars
@@ -109,6 +111,7 @@ Contains
     stateNew(18) = sv%d1T
     If (nstatev .EQ. 18) Return ! Fiber compression disabled
     stateNew(19) = sv%d1C
+    stateNew(20) = sv%pert
 
     Return
   End Function storeStateVars
