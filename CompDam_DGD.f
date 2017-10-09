@@ -94,6 +94,7 @@ Subroutine CompDam(  &
 
   ! Damage variables, failure indices, damage thresholds
   Double Precision :: d1C_dummy, rfC_dummy
+  Double Precision :: randomNumber
 
   ! Stress
   Double Precision :: Cauchy(3,3)
@@ -224,6 +225,15 @@ Subroutine CompDam(  &
   !    Recall previous elastic limits, plasticity, and damage states:    !
   ! -------------------------------------------------------------------- !
   sv = loadStateVars(nstatev, stateOld(km,:))
+  
+  if (totalTime.eq.dt) then 
+        call random_number(randomNumber)
+           if (randomNumber.gt.0.5d0) then 
+               sv%pert = 0.05d0
+           end if 
+  end if
+            
+       m%YT = (1-sv%pert)*m%YT
 
   ! The sign of the change in shear strain, used in the shear nonlinearity subroutine. This was previously a state variable.
   If (m%shearNonlinearity) sv%d_eps12 = Sign(one, (F(1,1)*F(1,2) + F(2,1)*F(2,2) + F(3,2)*F(3,1)) - (F_old(1,1)*F_old(1,2) + F_old(2,1)*F_old(2,2) + F_old(3,2)*F_old(3,1)))
